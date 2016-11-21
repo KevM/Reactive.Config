@@ -30,10 +30,8 @@ namespace Reactive.Config.Tests
             public void get_after_store_should_match_stored_result()
             {
                 var original = new TestConfigured();
-                var configResult = new ConfigurationResult<TestConfigured>(original)
-                {
-                    Observable = _observable
-                };
+                var configResult = new ConfigurationResult<TestConfigured>(original, _observable);
+
                 _cut.Store(configResult);
 
                 _cut.Get<TestConfigured>().Should().BeSameAs(original);
@@ -44,11 +42,9 @@ namespace Reactive.Config.Tests
             {
                 var original = new TestConfigured();
                 var replacement = new TestConfigured();
-                var configResult = new ConfigurationResult<TestConfigured>(original)
-                {
-                    Observable = _observable
-                };
+                var configResult = new ConfigurationResult<TestConfigured>(original, _observable);
                 _cut.Store(configResult);
+
                 _observable.OnNext(replacement);
 
                 _cut.Get<TestConfigured>().Should().BeSameAs(replacement);

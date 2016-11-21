@@ -55,7 +55,7 @@ namespace Reactive.Config.Tests
             public void should_get_results_from_sources_handling_T()
             {
                 var expectedResult = new TestConfigured();
-                var configurationResult = new ConfigurationResult<TestConfigured>(expectedResult);
+                var configurationResult = new ConfigurationResult<TestConfigured>(expectedResult, null);
                 _sources[1].Handles<TestConfigured>().Returns(true);
                 _sources[1]
                     .Get(Arg.Any<ConfigurationResult<TestConfigured>>())
@@ -72,13 +72,13 @@ namespace Reactive.Config.Tests
             [Test]
             public void should_return_aggregated_result_from_sources_handling_T()
             {
-                var configurationResult1 = new ConfigurationResult<TestConfigured>(new TestConfigured());
+                var configurationResult1 = new ConfigurationResult<TestConfigured>(new TestConfigured(), null);
                 _sources[0].Handles<TestConfigured>().Returns(true);
                 _sources[0].Get(Arg.Any<ConfigurationResult<TestConfigured>>())
                     .Returns(configurationResult1);
 
                 var expectedResult = new TestConfigured();
-                var configurationResult2 = new ConfigurationResult<TestConfigured>(expectedResult);
+                var configurationResult2 = new ConfigurationResult<TestConfigured>(expectedResult, null);
                 _sources[1].Handles<TestConfigured>().Returns(true);
                 _sources[1].Get(configurationResult1)
                     .Returns(configurationResult2);
@@ -94,7 +94,7 @@ namespace Reactive.Config.Tests
             [Test]
             public void should_store_aggregated_result_for_T()
             {
-                var aggregatedResult = new ConfigurationResult<TestConfigured>(new TestConfigured());
+                var aggregatedResult = new ConfigurationResult<TestConfigured>(new TestConfigured(), null);
                 _sources[0].Handles<TestConfigured>().Returns(true);
                 _sources[0].Get(Arg.Any<ConfigurationResult<TestConfigured>>())
                     .Returns(aggregatedResult);

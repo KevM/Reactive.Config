@@ -27,7 +27,7 @@ namespace Reactive.Config
 
             var handlingSources = _sources.Where(s => s.Handles<T>()).ToList();
 
-            var acc = new ConfigurationResult<T>(new T());
+            var acc = new ConfigurationResult<T>(new T(), null);
 
             var configurationResult = handlingSources.Aggregate(acc, (a, s) => s.Get(a));
 

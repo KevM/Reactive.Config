@@ -8,10 +8,10 @@ namespace Reactive.Config
         public IObservable<T> Observable { get; set; }
         public T Result { get; set; }
 
-        public ConfigurationResult(T result)
+        public ConfigurationResult(T result, IObservable<T> observable)
         {
             Result = result;
-            //Observable = Observable.Empty<T>();
+            Observable = observable;
         }
     }
 }
