@@ -1,4 +1,5 @@
 group Test
-	NSubstitute
-	Microsoft.Reactive.Testing
-	NUnit
+NSubstitute
+Microsoft.Reactive.Testing
+NUnit
+FluentAssertions

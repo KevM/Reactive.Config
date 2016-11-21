@@ -17,7 +17,7 @@ namespace Reactive.Config
             _sources.Add(source);
         }
 
-        public void Add<T>() where T : struct, IConfigured
+        public void Add<T>() where T : class, IConfigured, new()
         {
             
         }

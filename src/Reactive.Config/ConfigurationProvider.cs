@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,33 +5,35 @@ namespace Reactive.Config
 {
     public interface IConfigurationProvider
     {
-        T Get<T>() where T : struct, IConfigured;
-//        IObservable<T> GetObservable<T>() where T : struct, IConfigured;
+        T Get<T>() where T : class, IConfigured, new();
     }
 
     public class ConfigurationProvider : IConfigurationProvider
     {
         private readonly IEnumerable<IConfigurationSource> _sources;
+        private readonly IConfigurationResultStore _resultStore;
 
-        public ConfigurationProvider(IEnumerable<IConfigurationSource> sources)
+        public ConfigurationProvider(IEnumerable<IConfigurationSource> sources, IConfigurationResultStore resultStore)
         {
             _sources = sources;
+            _resultStore = resultStore;
         }
 
-        public T Get<T>() where T : struct, IConfigured
+        public T Get<T>() where T : class, IConfigured, new()
         {
-            var handlingSources = _sources.Where(s => s.Handles<T>());
+            var existingResult = _resultStore.Get<T>();
 
-            return new T();
-//            var acc = new T();
-//            return _sources.Aggregate(acc, (a, source) =>{
-//                if()
-//            });
+            if (existingResult != null) return existingResult;
+
+            var handlingSources = _sources.Where(s => s.Handles<T>()).ToList();
+
+            var acc = new ConfigurationResult<T>(new T());
+
+            var configurationResult = handlingSources.Aggregate(acc, (a, s) => s.Get(a));
+
+            _resultStore.Store(configurationResult);
+
+            return configurationResult.Result;
         }
-
-//        public IObservable<T> GetObservable<T>() where T : struct, IConfigured
-//        {
-//            throw new NotImplementedException();
-//        }
     }
 }

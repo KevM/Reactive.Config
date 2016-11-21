@@ -36,6 +36,7 @@ GROUP Test
 FRAMEWORK: NET452
 NUGET
   remote: https://www.nuget.org/api/v2
+    FluentAssertions (4.17)
     Microsoft.Reactive.Testing (3.1.1)
       System.Reactive.PlatformServices (>= 3.1.1)
     NSubstitute (1.10)

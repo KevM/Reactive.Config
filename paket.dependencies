@@ -10,6 +10,7 @@ group Test
 	framework: net452
     source https://www.nuget.org/api/v2
 
+nuget FluentAssertions
     nuget NSubstitute
 	nuget NUnit
     nuget NUnit.Runners
