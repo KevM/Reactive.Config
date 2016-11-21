@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Threading;
 
 namespace Reactive.Config
@@ -19,8 +20,6 @@ namespace Reactive.Config
         private readonly IDictionary<Type, object> _results = new Dictionary<Type, object>();
 
         private readonly IList<IDisposable> _subscriptions = new List<IDisposable>();
-
-        public IScheduler Scheduler { get; set; } = DefaultScheduler.Instance;
 
         public void Store<T>(ConfigurationResult<T> configurationResult) where T : class, IConfigured, new()
         {
