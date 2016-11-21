@@ -1,5 +1,4 @@
-REFERENCES: STRICT
-FRAMEWORK: NET45
+FRAMEWORK: NET452
 NUGET
   remote: https://www.nuget.org/api/v2
     System.Reactive (3.1.1)
@@ -15,8 +14,26 @@ NUGET
     System.Reactive.Windows.Threading (3.1.1)
       System.Reactive.Core (>= 3.1.1)
 
+GROUP Build
+FRAMEWORK: NET452
+NUGET
+  remote: https://www.nuget.org/api/v2
+    NUnit.ConsoleRunner (3.5)
+    NUnit.Extension.NUnitProjectLoader (3.5)
+    NUnit.Extension.NUnitV2Driver (3.5)
+    NUnit.Extension.NUnitV2ResultWriter (3.5)
+    NUnit.Extension.TeamCityEventListener (1.0.2)
+    NUnit.Extension.VSProjectLoader (3.5)
+    NUnit.Runners (3.5)
+      NUnit.ConsoleRunner (>= 3.5)
+      NUnit.Extension.NUnitProjectLoader (>= 3.5)
+      NUnit.Extension.NUnitV2Driver (>= 3.5)
+      NUnit.Extension.NUnitV2ResultWriter (>= 3.5)
+      NUnit.Extension.TeamCityEventListener (>= 1.0.2)
+      NUnit.Extension.VSProjectLoader (>= 3.5)
+
 GROUP Test
-FRAMEWORK: NET45
+FRAMEWORK: NET452
 NUGET
   remote: https://www.nuget.org/api/v2
     Microsoft.Reactive.Testing (3.1.1)

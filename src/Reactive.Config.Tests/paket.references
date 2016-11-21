@@ -1,4 +1,4 @@
 group Test
-NUnit
-NSubstitute
-Microsoft.Reactive.Testing
+	NSubstitute
+	Microsoft.Reactive.Testing
+	NUnit

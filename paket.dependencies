@@ -1,17 +1,22 @@
-references: strict
 source https://www.nuget.org/api/v2
 
 group Main
-    framework: net45
+    framework: net452
 	source https://www.nuget.org/api/v2
     
     nuget System.Reactive
 
 group Test
-	framework: net45
+	framework: net452
     source https://www.nuget.org/api/v2
 
     nuget NSubstitute
-    nuget NUnit
+	nuget NUnit
     nuget NUnit.Runners
 	nuget Microsoft.Reactive.Testing
+
+group Build
+	framework: net452
+    source https://www.nuget.org/api/v2
+
+    nuget NUnit.Runners
