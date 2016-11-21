@@ -1,8 +1,6 @@
 ﻿
 using System.Reactive.Subjects;
 using FluentAssertions;
-using Microsoft.Reactive.Testing;
-using NSubstitute;
 using NUnit.Framework;
 
 namespace Reactive.Config.Tests

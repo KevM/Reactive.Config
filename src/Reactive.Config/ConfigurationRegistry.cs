@@ -19,7 +19,7 @@ namespace Reactive.Config
 
         public void Add<T>() where T : class, IConfigured, new()
         {
-            
+
         }
 
         public IConfigurationProvider GetProvider()

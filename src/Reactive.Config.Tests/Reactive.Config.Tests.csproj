@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Namespace_Keypath_Provider.cs" />
     <Compile Include="Configuration_Result_Store.cs" />
     <Compile Include="Configuration_Provider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
