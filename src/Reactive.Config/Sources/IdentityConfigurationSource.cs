@@ -1,4 +1,5 @@
-﻿using System.Reactive.Linq;
+﻿using System;
+using System.Reactive.Linq;
 
 namespace Reactive.Config.Sources
 {
@@ -16,6 +17,7 @@ namespace Reactive.Config.Sources
             var resultOut = new T();
             var observable = Observable.Never<T>();
 
+            Console.WriteLine($"Identity getting config for {typeof(T).Namespace}.");
             return new ConfigurationResult<T>(resultOut, observable);
         }
     }

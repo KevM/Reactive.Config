@@ -14,11 +14,12 @@ namespace Reactive.Config.StructureMap
                 .For(type)
                 .Use("Reactive.Config", ctx =>
                 {
+                    var t = type;
                     var provider = ctx.GetInstance<IConfigurationProvider>();
 
                     var method = provider.GetType().GetMethod("Get");
-                    var generic = method.MakeGenericMethod(ctx.RootType);
-                    return generic.Invoke(this, null);
+                    var generic = method.MakeGenericMethod(t);
+                    return generic.Invoke(provider, null);
                 });
         }
     }

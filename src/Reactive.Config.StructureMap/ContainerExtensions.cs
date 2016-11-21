@@ -13,6 +13,8 @@ namespace Reactive.Config.StructureMap
             var configRegsitry = new ReactiveConfigRegsitry(config);
 
             action(configRegsitry);
+
+            config.For<IConfigurationProvider>().Use<ConfigurationProvider>();
         }
     }
 }

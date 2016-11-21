@@ -1,7 +1,9 @@
 ﻿using System;
+using Reactive.Config;
 using Reactive.Config.Sources;
 using Reactive.Config.StructureMap;
 using StructureMap;
+using StructureMap.Graph;
 
 namespace HelloReactiveConfig
 {
@@ -14,6 +16,12 @@ namespace HelloReactiveConfig
                 _.ReactiveConfig(rc =>
                 {
                     rc.AddSource<IdentityConfigurationSource>();
+                });
+
+                _.Scan(s =>
+                {
+                    s.TheCallingAssembly();
+                    s.Convention<ReactiveConfig>();
                 });
             });
 

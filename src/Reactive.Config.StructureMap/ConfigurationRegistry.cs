@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using StructureMap;
 
 namespace Reactive.Config.StructureMap
