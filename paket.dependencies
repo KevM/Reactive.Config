@@ -6,6 +6,12 @@ group Main
     
     nuget System.Reactive
 
+group StructureMap
+	framework: net452
+    source https://www.nuget.org/api/v2
+
+    nuget StructureMap ~> 3.1
+
 group Test
 	framework: net452
     source https://www.nuget.org/api/v2

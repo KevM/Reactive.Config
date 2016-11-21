@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,6 +7,7 @@ namespace Reactive.Config
     public interface IConfigurationProvider
     {
         T Get<T>() where T : class, IConfigured, new();
+//        object Get(Type type);
     }
 
     public class ConfigurationProvider : IConfigurationProvider
