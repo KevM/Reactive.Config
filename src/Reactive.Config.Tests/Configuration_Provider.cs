@@ -10,7 +10,7 @@ namespace Reactive.Config.Tests
         public bool IsEnabled { get; set; } = true;
     }
 
-    public class Configuration_Provider_Tests
+    public class Configuration_Provider
     {
         [TestFixture]
         public class Get

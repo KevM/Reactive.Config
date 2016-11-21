@@ -40,7 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration_Provider_Tests.cs" />
+    <Compile Include="Configuration_Result_Store.cs" />
+    <Compile Include="Configuration_Provider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

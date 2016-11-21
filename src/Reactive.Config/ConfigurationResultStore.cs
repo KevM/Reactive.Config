@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive.Concurrency;
 using System.Threading;
 
 namespace Reactive.Config
 {
     public interface IConfigurationResultStore
     {
-        void Store<T>(ConfigurationResult<T> result) where T : class, IConfigured, new();
+        void Store<T>(ConfigurationResult<T> configurationResult) where T : class, IConfigured, new();
         T Get<T>() where T : class, IConfigured, new();
     }
 
@@ -19,16 +20,19 @@ namespace Reactive.Config
 
         private readonly IList<IDisposable> _subscriptions = new List<IDisposable>();
 
-        public void Store<T>(ConfigurationResult<T> result) where T : class, IConfigured, new()
+        public IScheduler Scheduler { get; set; } = DefaultScheduler.Instance;
+
+        public void Store<T>(ConfigurationResult<T> configurationResult) where T : class, IConfigured, new()
         {
+            UpdateResult(configurationResult.Result);
             lock (StoreLocker)
             {
-                var sub = result.Observable.Subscribe(UpdateResult);
+                var sub = configurationResult.Observable.Subscribe(UpdateResult);
                 _subscriptions.Add(sub);
             }
         }
 
-        private void UpdateResult<T>(T newResult) where T : class, IConfigured, new()
+        public void UpdateResult<T>(T newResult) where T : class, IConfigured, new()
         {
             try
             {
