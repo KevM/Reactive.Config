@@ -26,4 +26,5 @@ group Build
 	framework: net452
     source https://www.nuget.org/api/v2
 
+    nuget FAKE
     nuget NUnit.Runners

@@ -18,6 +18,7 @@ GROUP Build
 FRAMEWORK: NET452
 NUGET
   remote: https://www.nuget.org/api/v2
+    FAKE (4.45.2)
     NUnit.ConsoleRunner (3.5)
     NUnit.Extension.NUnitProjectLoader (3.5)
     NUnit.Extension.NUnitV2Driver (3.5)
