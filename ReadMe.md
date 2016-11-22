@@ -1,6 +1,8 @@
 # Reactive Configuration
 
-> This work is experimental and part of a HackAThon I am participating in for @uship
+[![Build status](https://ci.appveyor.com/api/projects/status/tukcgjiunyh09o3i?svg=true)](https://ci.appveyor.com/project/KevM/reactive-config) 
+
+__This work is experimental and part of a HackAThon I am participating in for @uship__
 
 Wouldn’t it be great to take a dependency on a Concrete POCO and know that it’s state is de-serialized from the most recent configuration settings for your system?  Your IoC container could be configured to create Configured Types whose state is determined by potentially many Configuration Stores. Each store would source its configuration settings from a different location (env, appSettings, Consul). A Configuration Registry would setup the Configuration Stores in play and their precedence.
 
