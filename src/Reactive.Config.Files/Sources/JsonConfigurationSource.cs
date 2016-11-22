@@ -19,7 +19,7 @@ namespace Reactive.Config.Files.Sources
 
         public bool Handles<T>() where T : class, IConfigured, new()
         {
-            var settingsFile = GetSettingsFileInfo<T>();
+            var settingsFile = GetConfigurationFileInfo<T>();
 
             return settingsFile.Exists;
         }
@@ -27,9 +27,9 @@ namespace Reactive.Config.Files.Sources
         public ConfigurationResult<T> Get<T>(ConfigurationResult<T> result) where T : class, IConfigured, new()
         {
             var pollingInterval = TimeSpan.FromSeconds(_settings.PollingIntervalInSeconds);
-            var settingsFileInfo = GetSettingsFileInfo<T>();
+            var settingsFileInfo = GetConfigurationFileInfo<T>();
 
-            var model = GetSettingModel<T>(settingsFileInfo.FullName);
+            var model = GetConfigured<T>(settingsFileInfo);
 
             var observable = settingsFileInfo
                 .PollFile(pollingInterval)
@@ -44,7 +44,7 @@ namespace Reactive.Config.Files.Sources
             {
                 case Notification.Type.Changed:
                 case Notification.Type.Created:
-                    return GetSettingModel<T>(notification.FullName);
+                    return GetConfigured<T>(notification.Info);
                 default:
                     return new T();
             }
@@ -52,16 +52,16 @@ namespace Reactive.Config.Files.Sources
 
         // Exposed for testing. Not on the interface.
 
-        public FileInfo GetSettingsFileInfo<T>(string suffix = ".json") where T : class, IConfigured, new()
+        public FileInfo GetConfigurationFileInfo<T>(string suffix = ".json") where T : class, IConfigured, new()
         {
             var settingsFileName = _keyPathProvider.GetKeyPath<T>() + suffix;
-            var settingsFilePath = Path.Combine(_settings.SettingsFilePath, settingsFileName);
+            var settingsFilePath = Path.Combine(_settings.ConfigurationFilePath, settingsFileName);
             return new FileInfo(settingsFilePath);
         }
 
         public FileInfo CreateConfigFile<T>(T model) where T : class, IConfigured, new()
         {
-            var settingsFile = GetSettingsFileInfo<T>();
+            var settingsFile = GetConfigurationFileInfo<T>();
 
             if (settingsFile.Directory == null) throw new ArgumentException("File must be in a directory");
             if (!settingsFile.Directory.Exists)
@@ -78,9 +78,9 @@ namespace Reactive.Config.Files.Sources
             return settingsFile;
         }
 
-        private static T GetSettingModel<T>(string filePath) where T : class, IConfigured, new()
+        private static T GetConfigured<T>(FileInfo fileInfo) where T : class, IConfigured, new()
         {
-            using (var file = File.OpenText(filePath))
+            using (var file = File.OpenText(fileInfo.FullName))
             {
                 var serializer = new JsonSerializer();
                 return (T) serializer.Deserialize(file, typeof(T));

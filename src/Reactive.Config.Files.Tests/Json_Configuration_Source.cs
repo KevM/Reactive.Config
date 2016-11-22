@@ -37,7 +37,7 @@ namespace Reactive.Config.Files.Tests
             [Test]
             public void should_handle_when_settings_path_for_T_exists()
             {
-                var settingsPath = _cut.GetSettingsFileInfo<TestConfigured>();
+                var settingsPath = _cut.GetConfigurationFileInfo<TestConfigured>();
                 CreateConfigFile(settingsPath, "{}");
 
                 var result = _cut.Handles<TestConfigured>();
@@ -56,7 +56,7 @@ namespace Reactive.Config.Files.Tests
             [Test]
             public void should_not_handle_when_settings_file_does_not_exist()
             {
-                Directory.CreateDirectory(_settings.SettingsFilePath);
+                Directory.CreateDirectory(_settings.ConfigurationFilePath);
 
                 var result = _cut.Handles<TestConfigured>();
 
@@ -136,7 +136,7 @@ namespace Reactive.Config.Files.Tests
             var settingsFilePath = Path.Combine(Path.GetTempPath(), subdir);
             return new JsonConfigurationSourceSettings
             {
-                SettingsFilePath = settingsFilePath,
+                ConfigurationFilePath = settingsFilePath,
                 PollingIntervalInSeconds = 0.01
             };
         }

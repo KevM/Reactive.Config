@@ -14,15 +14,11 @@ namespace Reactive.Config.Files.Watcher
             Error
         }
 
-        private FileInfo Info { get; }
-
+        public FileInfo Info { get; }
         public bool Exists { get; }
         public long Size { get; }
         public Type NotificationType { get; }
         public Exception Error { get; }
-        public string FullName => Info.FullName;
-        public string Name => Info.Name;
-        public string Folder => Info.DirectoryName;
 
         public Notification(FileInfo fileInfo)
         {
@@ -82,7 +78,7 @@ namespace Reactive.Config.Files.Watcher
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Equals(FullName, other.FullName)
+            return Equals(Info.FullName, other.Info.FullName)
                    && Exists == other.Exists
                    && Size == other.Size
                    && NotificationType == other.NotificationType;
@@ -99,7 +95,7 @@ namespace Reactive.Config.Files.Watcher
         {
             unchecked
             {
-                var hashCode = FullName?.GetHashCode() ?? 0;
+                var hashCode = Info.FullName.GetHashCode();
                 hashCode = (hashCode*397) ^ Exists.GetHashCode();
                 hashCode = (hashCode*397) ^ Size.GetHashCode();
                 hashCode = (hashCode*397) ^ (int) NotificationType;
