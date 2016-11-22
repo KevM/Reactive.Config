@@ -1,17 +1,10 @@
 FRAMEWORK: NET452
 NUGET
   remote: https://www.nuget.org/api/v2
-    System.Reactive (3.1.1)
-      System.Reactive.PlatformServices (>= 3.1.1)
-      System.Reactive.Windows.Threading (>= 3.1.1)
     System.Reactive.Core (3.1.1)
       System.Reactive.Interfaces (>= 3.1.1)
     System.Reactive.Interfaces (3.1.1)
     System.Reactive.Linq (3.1.1)
-      System.Reactive.Core (>= 3.1.1)
-    System.Reactive.PlatformServices (3.1.1)
-      System.Reactive.Linq (>= 3.1.1)
-    System.Reactive.Windows.Threading (3.1.1)
       System.Reactive.Core (>= 3.1.1)
 
 GROUP Build
@@ -32,6 +25,12 @@ NUGET
       NUnit.Extension.NUnitV2ResultWriter (>= 3.5)
       NUnit.Extension.TeamCityEventListener (>= 1.0.2)
       NUnit.Extension.VSProjectLoader (>= 3.5)
+
+GROUP Files
+FRAMEWORK: NET452
+NUGET
+  remote: https://www.nuget.org/api/v2
+    Newtonsoft.Json (9.0.1)
 
 GROUP StructureMap
 FRAMEWORK: NET452

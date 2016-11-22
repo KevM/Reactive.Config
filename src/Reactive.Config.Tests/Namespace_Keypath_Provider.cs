@@ -19,10 +19,9 @@ namespace Reactive.Config.Tests
             [Test]
             public void should_return_namespace_of_T()
             {
-                var model = new TestConfigured();
-                var type = model.GetType();
+                var type = typeof(TestConfigured);
 
-                _cut.GetKeyPath(model).Should().Be(type.Namespace);
+                _cut.GetKeyPath<TestConfigured>().Should().Be(type.Namespace);
             }
         }
     }

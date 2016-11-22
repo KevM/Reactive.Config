@@ -1,0 +1,4 @@
+group Test
+NSubstitute
+NUnit
+FluentAssertions

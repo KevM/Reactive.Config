@@ -1,6 +1,4 @@
-﻿using System.Reactive.Linq;
-
-namespace Reactive.Config
+﻿namespace Reactive.Config
 {
     public interface IConfigurationSource
     {

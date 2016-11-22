@@ -43,7 +43,7 @@
     <Compile Include="ConfigurationProvider.cs" />
     <Compile Include="ConfigurationResult.cs" />
     <Compile Include="ConfigurationResultStore.cs" />
-    <Compile Include="ConfigurationSource.cs" />
+    <Compile Include="IConfigurationSource.cs" />
     <Compile Include="ConfigurationSourceResolver.cs" />
     <Compile Include="IConfigured.cs" />
     <Compile Include="IKeyPathProvider.cs" />
@@ -89,34 +89,6 @@
         <Reference Include="System.Reactive.Linq">
           <HintPath>..\..\packages\System.Reactive.Linq\lib\net45\System.Reactive.Linq.dll</HintPath>
           <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5.2'">
-      <ItemGroup>
-        <Reference Include="System.Reactive.PlatformServices">
-          <HintPath>..\..\packages\System.Reactive.PlatformServices\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-      </ItemGroup>
-    </When>
-  </Choose>
-  <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5.2'">
-      <ItemGroup>
-        <Reference Include="System.Reactive.Windows.Threading">
-          <HintPath>..\..\packages\System.Reactive.Windows.Threading\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-        <Reference Include="System.Windows">
-          <Paket>True</Paket>
-        </Reference>
-        <Reference Include="WindowsBase">
           <Paket>True</Paket>
         </Reference>
       </ItemGroup>

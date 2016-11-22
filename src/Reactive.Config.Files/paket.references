@@ -1,0 +1,4 @@
+group Main
+    System.Reactive.Linq
+group Files
+Newtonsoft.Json

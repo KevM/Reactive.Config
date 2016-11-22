@@ -4,13 +4,19 @@ group Main
     framework: net452
 	source https://www.nuget.org/api/v2
     
-    nuget System.Reactive
+    nuget System.Reactive.Linq
 
 group StructureMap
 	framework: net452
     source https://www.nuget.org/api/v2
 
     nuget StructureMap ~> 3.1
+
+group Files
+	framework: net452
+    source https://www.nuget.org/api/v2
+
+    nuget Newtonsoft.Json
 
 group Test
 	framework: net452
