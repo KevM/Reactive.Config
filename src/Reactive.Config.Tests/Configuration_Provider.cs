@@ -1,4 +1,6 @@
 ﻿
+using System;
+using System.Reactive.Linq;
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
@@ -16,19 +18,16 @@ namespace Reactive.Config.Tests
         public class Get
         {
             private ConfigurationProvider _cut;
-            private IConfigurationSource[] _sources;
             private IConfigurationResultStore _resultStore;
+            private IConfigurationSourceResolver _sourceResolver;
 
             [SetUp]
             public void beforeAll()
             {
                 _resultStore = Substitute.For<IConfigurationResultStore>();
+                _sourceResolver = Substitute.For<IConfigurationSourceResolver>();
 
-                var source1 = Substitute.For<IConfigurationSource>();
-                var source2 = Substitute.For<IConfigurationSource>();
-                _sources = new[] {source1, source2};
-                
-                _cut = new ConfigurationProvider(_sources, _resultStore);
+                _cut = new ConfigurationProvider(_resultStore, _sourceResolver);
             }
 
             [Test]
@@ -40,68 +39,18 @@ namespace Reactive.Config.Tests
                 var result = _cut.Get<TestConfigured>();
 
                 result.Should().BeSameAs(expectedResult);
+                _sourceResolver.DidNotReceive().Resolve<TestConfigured>();
             }
             
             [Test]
-            public void should_ask_each_source_if_it_handles_T()
-            {
-                _cut.Get<TestConfigured>();
-
-                _sources[0].Received().Handles<TestConfigured>();
-                _sources[1].Received().Handles<TestConfigured>();
-            }
-
-            [Test]
-            public void should_get_results_from_sources_handling_T()
-            {
-                var expectedResult = new TestConfigured();
-                var configurationResult = new ConfigurationResult<TestConfigured>(expectedResult, null);
-                _sources[1].Handles<TestConfigured>().Returns(true);
-                _sources[1]
-                    .Get(Arg.Any<ConfigurationResult<TestConfigured>>())
-                    .Returns(configurationResult);
-
-                _cut.Get<TestConfigured>();
-
-                _sources[0].DidNotReceive()
-                    .Get(Arg.Any<ConfigurationResult<TestConfigured>>());
-                _sources[1].Received()
-                    .Get(Arg.Any<ConfigurationResult<TestConfigured>>());
-            }
-
-            [Test]
-            public void should_return_aggregated_result_from_sources_handling_T()
-            {
-                var configurationResult1 = new ConfigurationResult<TestConfigured>(new TestConfigured(), null);
-                _sources[0].Handles<TestConfigured>().Returns(true);
-                _sources[0].Get(Arg.Any<ConfigurationResult<TestConfigured>>())
-                    .Returns(configurationResult1);
-
-                var expectedResult = new TestConfigured();
-                var configurationResult2 = new ConfigurationResult<TestConfigured>(expectedResult, null);
-                _sources[1].Handles<TestConfigured>().Returns(true);
-                _sources[1].Get(configurationResult1)
-                    .Returns(configurationResult2);
-
-                var result = _cut.Get<TestConfigured>();
-
-                _sources[0].Received().Get(Arg.Any<ConfigurationResult<TestConfigured>>());
-                _sources[1].Received().Get(configurationResult1);
-
-                result.Should().BeSameAs(expectedResult);
-            }
-
-            [Test]
             public void should_store_aggregated_result_for_T()
             {
-                var aggregatedResult = new ConfigurationResult<TestConfigured>(new TestConfigured(), null);
-                _sources[0].Handles<TestConfigured>().Returns(true);
-                _sources[0].Get(Arg.Any<ConfigurationResult<TestConfigured>>())
-                    .Returns(aggregatedResult);
+                var resolved = ConfigurationResult<TestConfigured>.Create();
+                _sourceResolver.Resolve<TestConfigured>().Returns(resolved);
 
                 _cut.Get<TestConfigured>();
 
-                _resultStore.Received().Store(aggregatedResult);
+                _resultStore.Received().Store(resolved);
             }
         }
     }

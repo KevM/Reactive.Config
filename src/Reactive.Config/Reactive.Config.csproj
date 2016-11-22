@@ -44,6 +44,7 @@
     <Compile Include="ConfigurationResult.cs" />
     <Compile Include="ConfigurationResultStore.cs" />
     <Compile Include="ConfigurationSource.cs" />
+    <Compile Include="ConfigurationSourceResolver.cs" />
     <Compile Include="IConfigured.cs" />
     <Compile Include="IKeyPathProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

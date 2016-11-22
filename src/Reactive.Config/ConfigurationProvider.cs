@@ -1,24 +1,19 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Reactive.Config
 {
     public interface IConfigurationProvider
     {
         T Get<T>() where T : class, IConfigured, new();
-//        object Get(Type type);
     }
 
     public class ConfigurationProvider : IConfigurationProvider
     {
-        private readonly IEnumerable<IConfigurationSource> _sources;
         private readonly IConfigurationResultStore _resultStore;
+        private readonly IConfigurationSourceResolver _sourceResolver;
 
-        public ConfigurationProvider(IEnumerable<IConfigurationSource> sources, IConfigurationResultStore resultStore)
+        public ConfigurationProvider(IConfigurationResultStore resultStore, IConfigurationSourceResolver sourceResolver)
         {
-            _sources = sources;
             _resultStore = resultStore;
+            _sourceResolver = sourceResolver;
         }
 
         public T Get<T>() where T : class, IConfigured, new()
@@ -27,11 +22,7 @@ namespace Reactive.Config
 
             if (existingResult != null) return existingResult;
 
-            var handlingSources = _sources.Where(s => s.Handles<T>()).ToList();
-
-            var acc = new ConfigurationResult<T>(new T(), null);
-
-            var configurationResult = handlingSources.Aggregate(acc, (a, s) => s.Get(a));
+            var configurationResult = _sourceResolver.Resolve<T>();
 
             _resultStore.Store(configurationResult);
 
