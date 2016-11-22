@@ -48,6 +48,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Reactive.Config.Files\Reactive.Config.Files.csproj">
+      <Project>{FCE5F386-77CD-447F-8210-C272FA224DFB}</Project>
+      <Name>Reactive.Config.Files</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Reactive.Config.StructureMap\Reactive.Config.StructureMap.csproj">
       <Project>{cc3dc1d9-5535-484a-82e6-df1d29ef3c0e}</Project>
       <Name>Reactive.Config.StructureMap</Name>

@@ -38,8 +38,9 @@ namespace Reactive.Config.Files.Sources
         public ConfigurationResult<T> Get<T>(ConfigurationResult<T> result) where T : class, IConfigured, new()
         {
             var model = GetSettingModel<T>();
+            var observable = Observable.Never<T>();
 
-            return new ConfigurationResult<T>(model, Observable.Never<T>());
+            return new ConfigurationResult<T>(model, observable);
         }
 
         private T GetSettingModel<T>() where T : class, IConfigured, new()

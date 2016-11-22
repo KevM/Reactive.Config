@@ -15,7 +15,7 @@ namespace Reactive.Config.Sources
         public ConfigurationResult<T> Get<T>(ConfigurationResult<T> result) where T : class, IConfigured, new()
         {
             var resultOut = new T();
-            var observable = Observable.Never<T>();
+            var observable = Observable.Empty<T>();
 
             Console.WriteLine($"Identity getting config for {typeof(T).Namespace}.");
             return new ConfigurationResult<T>(resultOut, observable);

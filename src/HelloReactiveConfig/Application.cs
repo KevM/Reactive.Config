@@ -1,5 +1,5 @@
 ﻿using System;
-using Reactive.Config;
+using Reactive.Config.Files.Sources;
 using Reactive.Config.Sources;
 using Reactive.Config.StructureMap;
 using StructureMap;
@@ -16,6 +16,7 @@ namespace HelloReactiveConfig
                 _.ReactiveConfig(rc =>
                 {
                     rc.AddSource<IdentityConfigurationSource>();
+                    rc.AddSource<JsonConfigurationSource>();
                 });
 
                 _.Scan(s =>
@@ -24,6 +25,9 @@ namespace HelloReactiveConfig
                     s.Convention<ReactiveConfig>();
                 });
             });
+
+            var test = new MyConfigured();
+            container.GetInstance<JsonConfigurationSource>().CreateConfigFile(test);
 
             var configured = container.GetInstance<MyConfigured>();
 
