@@ -7,8 +7,14 @@ namespace Reactive.Config.StructureMap
     {
         public static void ReactiveConfig(this ConfigurationExpression config, Action<IReactiveConfigRegistry> action)
         {
-            config.For<IKeyPathProvider>().Use<NamespaceKeyPathProvider>();
+            config.Scan(s =>
+            {
+                s.AssemblyContainingType<IConfigured>();
+                s.WithDefaultConventions();
+            });
+
             config.For<IConfigurationResultStore>().Singleton().Use<ConfigurationResultStore>();
+            config.For<IKeyPathProvider>().Use<NamespaceKeyPathProvider>();
 
             var configRegsitry = new ReactiveConfigRegsitry(config);
 
