@@ -25,6 +25,5 @@ namespace Reactive.Config.Tests
 
             return result.ToArray();
         }
-
     }
 }

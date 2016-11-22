@@ -1,3 +1,6 @@
+group Main
+System.Reactive.Linq
+
 group Test
 NSubstitute
 NUnit

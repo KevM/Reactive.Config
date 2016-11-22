@@ -94,6 +94,40 @@ namespace Reactive.Config.Files.Tests
                 configurationResult.Result.IsEnabled.Should().Be(model.IsEnabled);
                 configurationResult.Result.EnabledOn.Should().Be(model.EnabledOn);
             }
+
+            [Test]
+            public void observable_should_drop_a_marble_when_file_is_updated()
+            {
+                var model = new TestConfigured();
+                _cut.CreateConfigFile(model);
+
+                var observable = _cut.Get(ConfigurationResult<TestConfigured>.Create()).Observable;
+                
+                var update = observable.CaptureFirst(() =>
+                {
+                    model.IsEnabled = false;
+                    model.AppKey = "different key";
+                    model.EnabledOn = DateTime.UtcNow.AddDays(10);
+                    _cut.CreateConfigFile(model);
+                });
+
+                update.AppKey.Should().Be(model.AppKey);
+                update.IsEnabled.Should().Be(model.IsEnabled);
+                update.EnabledOn.Should().Be(model.EnabledOn);
+            }
+
+            [Test]
+            public void observable_should_note_drop_a_marble_when_file_is_not_updated()
+            {
+                var model = new TestConfigured();
+                _cut.CreateConfigFile(model);
+
+                var observable = _cut.Get(ConfigurationResult<TestConfigured>.Create()).Observable;
+
+                var result = observable.Capture(0.15);
+
+                result.Should().BeNull();
+            }
         }
 
         public static JsonConfigurationSourceSettings CreateSettings()
@@ -102,7 +136,8 @@ namespace Reactive.Config.Files.Tests
             var settingsFilePath = Path.Combine(Path.GetTempPath(), subdir);
             return new JsonConfigurationSourceSettings
             {
-                SettingsFilePath = settingsFilePath
+                SettingsFilePath = settingsFilePath,
+                PollingIntervalInSeconds = 0.01
             };
         }
 

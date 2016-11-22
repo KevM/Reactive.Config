@@ -11,7 +11,7 @@ namespace Reactive.Config
         {
             var type = typeof(T);
             
-            return type.Namespace;
+            return type.FullName;
         }
     }
 }

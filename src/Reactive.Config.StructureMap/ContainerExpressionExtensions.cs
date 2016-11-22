@@ -3,13 +3,14 @@ using StructureMap;
 
 namespace Reactive.Config.StructureMap
 {
-    public static class ContainerExtensions 
+    public static class ContainerExpressionExtensions 
     {
         public static void ReactiveConfig(this ConfigurationExpression config, Action<IReactiveConfigRegistry> action)
         {
             config.Scan(s =>
             {
                 s.AssemblyContainingType<IConfigured>();
+                s.Convention<ReactiveConfig>();
                 s.WithDefaultConventions();
             });
 
@@ -19,8 +20,6 @@ namespace Reactive.Config.StructureMap
             var configRegsitry = new ReactiveConfigRegsitry(config);
 
             action(configRegsitry);
-
-            config.For<IConfigurationProvider>().Use<ConfigurationProvider>();
         }
     }
 }
