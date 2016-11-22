@@ -21,7 +21,7 @@ namespace Reactive.Config.Tests
             {
                 var type = typeof(TestConfigured);
 
-                _cut.GetKeyPath<TestConfigured>().Should().Be(type.Namespace);
+                _cut.GetKeyPath<TestConfigured>().Should().Be(type.FullName);
             }
         }
     }
