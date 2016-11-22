@@ -23,16 +23,16 @@ namespace Reactive.Config.Files.Sources
 
         public bool Handles<T>() where T : class, IConfigured, new()
         {
-            var settingsFilePath = GetSettingsFilePath<T>();
+            var settingsFile = GetSettingsFileInfo<T>();
 
-            return File.Exists(settingsFilePath);
+            return settingsFile.Exists;
         }
 
-        private string GetSettingsFilePath<T>() where T : class, IConfigured, new()
+        public FileInfo GetSettingsFileInfo<T>(string suffix = ".json") where T : class, IConfigured, new()
         {
-            var settingsFileName = _keyPathProvider.GetKeyPath<T>();
+            var settingsFileName = _keyPathProvider.GetKeyPath<T>() + suffix;
             var settingsFilePath = Path.Combine(_settings.SettingsFilePath, settingsFileName);
-            return settingsFilePath;
+            return new FileInfo(settingsFilePath);
         }
 
         public ConfigurationResult<T> Get<T>(ConfigurationResult<T> result) where T : class, IConfigured, new()
@@ -44,7 +44,7 @@ namespace Reactive.Config.Files.Sources
 
         private T GetSettingModel<T>() where T : class, IConfigured, new()
         {
-            using (var file = File.OpenText(GetSettingsFilePath<T>()))
+            using (var file = File.OpenText(GetSettingsFileInfo<T>().FullName))
             {
                 var serializer = new JsonSerializer();
                 return (T) serializer.Deserialize(file, typeof(T));
@@ -53,21 +53,21 @@ namespace Reactive.Config.Files.Sources
 
         public FileInfo CreateConfigFile<T>(T model) where T : class, IConfigured, new()
         {
-            var file = new FileInfo(GetSettingsFilePath<T>());
+            var settingsFile = GetSettingsFileInfo<T>();
 
-            if (file.Directory == null) throw new ArgumentException("File must be in a directory");
-            if (!file.Directory.Exists)
+            if (settingsFile.Directory == null) throw new ArgumentException("File must be in a directory");
+            if (!settingsFile.Directory.Exists)
             {
-                file.Directory.Create();
+                settingsFile.Directory.Create();
             }
 
-            using (var f = File.CreateText(file.FullName))
+            using (var f = File.CreateText(settingsFile.FullName))
             {
                 var serializer = new JsonSerializer();
                 serializer.Serialize(f, model);
             }
 
-            return file;
+            return settingsFile;
         }
     }
 }

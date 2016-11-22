@@ -37,9 +37,8 @@ namespace Reactive.Config.Files.Tests
             [Test]
             public void should_handle_when_settings_path_for_T_exists()
             {
-                Directory.CreateDirectory(_settings.SettingsFilePath).Exists.Should().BeTrue();
-                var configFilePath = Path.Combine(_settings.SettingsFilePath, _expectedNamespace);
-                CreateConfigFile(configFilePath, "{}");
+                var settingsPath = _cut.GetSettingsFileInfo<TestConfigured>();
+                CreateConfigFile(settingsPath, "{}");
 
                 var result = _cut.Handles<TestConfigured>();
 
@@ -107,9 +106,15 @@ namespace Reactive.Config.Files.Tests
             };
         }
 
-        public static void CreateConfigFile(string filePath, string contents = "")
+        public static void CreateConfigFile(FileInfo file, string contents = "")
         {
-            File.WriteAllText(filePath, contents);
+            if (file.Directory == null) throw new ArgumentException("File has to be in a directory");
+            if (!file.Directory.Exists)
+            {
+                file.Directory.Create();
+            }
+
+            File.WriteAllText(file.FullName, contents);
         }
     }
 }
