@@ -1,14 +1,14 @@
-# Set the default behavior, in case people don't have core.autocrlf set.
-* text=auto
+# Disable text file normalization
+# http://davidlaing.com/2012/09/19/customise-your-gitattributes-to-become-a-git-ninja/
+* -text
 
-# Explicitly declare text files you want to always be normalized and converted
-# to native line endings on checkout.
-*.c text
-*.h text
+# Custom for Visual Studio
+*.sln merge=union
+*.csproj merge=union
+*.vbproj merge=union
+*.fsproj merge=union
+*.dbproj merge=union
 
-# Declare files that will always have CRLF line endings on checkout.
-*.sln text eol=crlf
-
-# Denote all files that are truly binary and should not be modified.
-*.png binary
-*.jpg binary
+#diff settings
+*.cs diff=csharp
+*.sql diff=sql
