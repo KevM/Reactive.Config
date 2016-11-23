@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
+using Reactive.Config.Extensions;
 
 namespace Reactive.Config.Sources
 {
@@ -24,18 +25,23 @@ namespace Reactive.Config.Sources
         public ConfigurationResult<T> Get<T>(ConfigurationResult<T> result) where T : class, IConfigured, new()
         {
             var configured = new T();
-//            var propertiesByName = typeof(T).GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(k=>k.Name);
-//            var propertiesFound = GetConfiguredDictionary<T>()
-//
-//            foreach (var property in propertiesFound)
-//            {
-//
-//            }
+
+            const BindingFlags flags = BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Public;
+            var typePropertiesByName = typeof(T).GetProperties(flags).ToDictionary(k=>k.Name);
+            var configPropertiesFound = ConfigByPropertyName<T>();
+
+            foreach (var keypair in configPropertiesFound)
+            {
+                if (!typePropertiesByName.ContainsKey(keypair.Key)) continue;
+                var propertyInfo = typePropertiesByName[keypair.Key];
+                var newValue = propertyInfo.BindValue(keypair.Value);
+                propertyInfo.SetValue(configured, newValue);
+            }
 
             return new ConfigurationResult<T>(configured, Observable.Never<T>());
         }
 
-        private IDictionary<string, string> GetConfiguredDictionary<T>() where T : class, IConfigured, new()
+        private IDictionary<string, string> ConfigByPropertyName<T>() where T : class, IConfigured, new()
         {
             return ConfiguredEnvironmentEntries<T>()
                 .ToDictionary(k => GetKeyTail((string) k.Key), v => (string) v.Value);

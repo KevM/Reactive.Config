@@ -43,12 +43,14 @@
     <Compile Include="ConfigurationProvider.cs" />
     <Compile Include="ConfigurationResult.cs" />
     <Compile Include="ConfigurationResultStore.cs" />
+    <Compile Include="Extensions\PropertyInfoExtensions.cs" />
     <Compile Include="IConfigurationSource.cs" />
     <Compile Include="ConfigurationSourceResolver.cs" />
     <Compile Include="IConfigured.cs" />
     <Compile Include="IKeyPathProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sources\EnvironmentConfigurationSource.cs" />
+    <Compile Include="Sources\FastYetSimpleTypeActivator.cs" />
     <Compile Include="Sources\IdentityConfigurationSource.cs" />
   </ItemGroup>
   <ItemGroup>
