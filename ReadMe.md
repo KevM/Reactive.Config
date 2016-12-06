@@ -2,82 +2,102 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/tukcgjiunyh09o3i?svg=true)](https://ci.appveyor.com/project/KevM/reactive-config) 
 
-__This work is experimental and part of a HackAThon I am participating in for @uship__
+Reactive Configuration let's you inject type safe configuraion settings into your application's types which can be source one or more Configuration Sources. These sources know how to keep the settings up-to-date using [Observables](http://reactivex.io/documentation/observable.html) under the hood, hence **Reactive Configuration**.    
 
-Wouldn’t it be great to take a dependency on a Concrete POCO and know that it’s state is de-serialized from the most recent configuration settings for your system?  Your IoC container could be configured to create Configured Types whose state is determined by potentially many Configuration Stores. Each store would source its configuration settings from a different location (env, appSettings, Consul). A Configuration Registry would setup the Configuration Stores in play and their precedence.
+Currently out of the box we provide:
 
-Having a robust, [reactive](http://reactivex.io/intro.html), and easy to use configuration story is liberating and can be used as a foundation layer for additional functionality such as Feature Toggles and A/B testing.
+- [StructureMap](http://structuremap.github.io/) IoC container integration
+- JSON configuration source
 
-## Configuration Stores
+## Example
 
-Configuration stores are responsible for matching the key space for a Configured Type with the source of configuration backing them. Say a source backed by environment variables is asked if it is a source for the POCO whose full qualified namespace is Caldron.Newt.Eye. The source could look for environment variables matching the POCO’s namespace. `“Caldron.Newt.Eye.<propertyname>”` and if if finds them declare it is a source for that POCO.
+Lets take a look at using Reactive Config. To make a configurable type simply add the `IConfigurable` marker interface.
 
-## Configuration Store Registration 
+```cs
+public class MyConfigured : IConfigured
+{
+    public bool IsEnabled { get; set; } = true;
+    public DateTime EnabledOn { get; set; } = DateTime.UtcNow + TimeSpan.FromDays(-7);
+    public string MyAppKey { get; set; } = "sooooouuuuuper seeeecrette app key";
+}
+```
 
-It will be desirable to have multiple sources of configuration data:
+Next we'll take a dependency on this configured type in one of our application types.
 
-- Type default properties.
-- Environment
-- Application Settings
-- Key Value Stores
+```cs
+public class MyService
+{
+    private readonly MyConfigured _config;
 
-## Reactive
+    public MyService(MyConfigured config)
+    {
+        _config = config;
+    }
 
-Each request for a Configured Type will get the latest config. Under the hood Configuration Sources could be reactive to changes via polling or in the case of [Consul long polling of keys](https://www.consul.io/docs/agent/http.html#blocking-queries) for changes. 
+    public void DoSomething()
+    {
+        if (!_config.IsEnabled || DateTime.Now <= _config.EnabledOn)
+        {
+            return;
+        }
 
-It would be possible to expose an `IObservable<TConfiguredType>` for each Configured Type which would ensure that IoC integrations and long lived types such as those created by Windows Services always have the latest configuration.
+        //login using my appkey
+        Console.WriteLine($"Logging in using AppKey: {_config.MyAppKey}");
+    }
+}
+```
 
-The application will declare which stores it is using and the order they will be used to populate the Configured Type. The last store in the chain to source a value for one of the Configured Type’s properties will be the one used. 
+Next, we'll setup our IoC container to use the JSON configuration source.  
 
-## Diagnostics
+In this example we use [StructureMap](http://structuremap.github.io/). Here we scan the current assembly for types needing reactive configuration. 
 
-Getting configuration settings out of a running system is pretty handy when you want to take a snapshot of all the configuration settings values in action. Providing a mechanism to write settings to an intermediate file or some format suitable for importing the settings into a source would be handy for devops tooling.
+```cs
+var container = new Container(_ =>
+{
+    _.ReactiveConfig(rc =>
+    {
+        rc.AddSource<JsonConfigurationSource>();
+    });
 
-## Features
+    _.Scan(s =>
+    {
+        s.TheCallingAssembly();
+        s.Convention<ReactiveConfig>();
+    });
+});
+```
 
-- Plain PoCos types opt in with an Interface
-  - Settings are partitioned by keys space which usually map to the type via namespace.
-  - Alternatively partitioned by a key path attribute or specialized interface.
-- IoC integration of configuration sources. Types can simply take a dependency on a concrete config sourced type and get up-to-date config. 
-- `IObservable<TConfigtype>` - Alternatively long lived types can use observables to react to configuration changes. Under the hood this is likely how the IoC integration will work and inject updated config types in the container.
-- Config is source from many locations. The order of precedence could be configurable.
-  - App settings
-  - Environment
-  - Local config files
-  - KV Stores (Consul, Redis)
-- Settings are reactive. Changes to the key store(s) should cause new config requests to have refreshed values.
-  - If the source file is modified new settings are serialized.
-  - KV store. Watch a root key (think consul key index long poll). If the source key value store root key is tickled re-serialize.
-- Diagnostics
-  - Export current settings to disk and a human friendly format for 
-  - Settings sources could be have an export (optional?) mechanism. This would be handy for tooling to save settings as an artifact which could be consumed by the source.
-    - Grab every reactive setting type in the system serialize it for each settings source registered. 
-    - Where/How to write the settings artifact could be configured via Reactive Settings?
+```cs
+var service = container.GetInstance<MyService>()
+service.DoSomething(); 
+```
 
-## API
- 
-- Configured Type - has reactive settings marker interface declaring it as something which expects itself to come from the configuration source
-  - Configured types have a key space which is either implicit (namespace) or declared (attribute, specialized interface).
-  - Each property will be a keyed by a composite of the key space + the property name (overridable with attribute?)
-  - Values will be obtained from Configuration Store.
-- Configuration Store - factories for Configured Types.
-  - Sources will declare what key spaces they are handling (chain of responsibility).
-  - During app start look at all the Configured Types and look in their store for the matching key spaces. For example an environment store would typically use the configured type’s namespace as a key prefix and would look for environment variables present which start with the same prefix. If would declare that it handles a key space.
-  - Multiple stores can handle a key space with values materializing from each store with the last store to match a key winning. In the case of reactive stores the last store updated wins.
-- Configuration Registry - where configured stores are… configured.
-  - Configuration stores registered will be used to source configured types.
-  - Their order is important so we need a way to declare the order.
+Run this code in a console app and you see this printed out: `Logging in using AppKey: sooooouuuuuper seeeecrette app key`.
 
-## Technical Challenges
+### Changing the configuraion:
 
-- De-serializing many different config sources.
-- Mapping key space and keys to Pocos.
-  - Use namespace as key path by default but we’ll need a namespace to key space mapping mechanism (abstracted)
-  - Use property names as Keys
-  - Support override attributes as people will inevitably want to map legacy Pocos. (Low priority)
-- Serializing to a format the configuration source can import.
+We currently don't have a configuration file so we are getting the default properties for the configured type. If you add this JSON file to your current working directory you can override the configuration 
 
-### Existing Libraries to draw inspiration from
+#### MyConfigured.json
 
-- [FubuCore settings source](https://lostechies.com/chadmyers/2011/06/03/cool-stuff-in-fubucore-no-5-easy-configuration/)
-- Service Stack [IAppSettings](https://github.com/ServiceStack/ServiceStack/blob/master/src/ServiceStack.Interfaces/Configuration/IAppSettings.cs)
+```json
+{
+  "MyAppKey" : "a different app key"
+}
+```
+
+Run the app again and you see `Logging in using AppKey: a different app key`.
+
+## Building 
+
+Open a command line:
+
+```
+git clone https://github.com/KevM/Reactive.Config
+
+cd Reactive.Connfig
+
+./build.cmd
+```
+
+The build automation will: pull down any dependencies, build, and run tests.
