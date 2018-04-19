@@ -1,3 +1,9 @@
 version: 1.0.{build}
+cache:
+ - paket-files -> paket.lock # cache HTTP downloads until packet.lock is changed.
+ - .fake -> build.fsx # cache compiled build scripts until modified.
+ - '%LOCALAPPDATA%\NuGet\Cache -> paket.lock'
+image: Visual Studio 2017
+
 build_script:
 - cmd: ./build.cmd Build
