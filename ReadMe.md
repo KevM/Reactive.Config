@@ -2,16 +2,26 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/tukcgjiunyh09o3i?svg=true)](https://ci.appveyor.com/project/KevM/reactive-config) 
 
-Reactive Configuration let's you inject type safe configuraion settings into your application's types which can be source one or more Configuration Sources. These sources know how to keep the settings up-to-date using [Observables](http://reactivex.io/documentation/observable.html) under the hood, hence **Reactive Configuration**.    
+Reactive Configuration let's you inject strongly typed configuration into your application sourced from one or more [Configuration Sources](https://github.com/KevM/Reactive.Config/blob/40dad3ac60efae489c10678697c080c4aef64cf0/src/Reactive.Config/IConfigurationSource.cs#L3-L7). These sources keep your configuration up-to-date using [Observables](http://reactivex.io/documentation/observable.html). If your observed configuration changes the next time you "need" your settings they will be up-to-date, hence **Reactive Configuration**.    
+
+## Philosophy 
+
+The goal of this library is to be your application's core supplier of static and dynamic configuration management. With dynamic configuration, we can build a lot of nice things on top of this:
+- The basics like application and environment settings.
+- [Feature toggles](https://martinfowler.com/bliki/FeatureToggle.html) 
+- [A/B testing](https://en.wikipedia.org/wiki/A/B_testing)
+- [Service discovery](http://microservices.io/patterns/server-side-discovery.html)
+
+### Today
 
 Currently out of the box we provide:
 
-- [StructureMap](http://structuremap.github.io/) IoC container integration
 - JSON configuration source
+- [StructureMap](http://structuremap.github.io/) IoC container integration
 
-## Example
+## Application Settings Example
 
-Lets take a look at using Reactive Config. To make a configurable type simply add the `IConfigurable` marker interface.
+Lets take a look at using Reactive.Config. To make a _configurable type_ simply add the `IConfigurable` marker interface to the type.
 
 ```cs
 public class MyConfigured : IConfigured
@@ -22,7 +32,7 @@ public class MyConfigured : IConfigured
 }
 ```
 
-Next we'll take a dependency on this configured type in one of our application types.
+Next we'll take a constructor dependency on this _configured type_ in one of our application types.
 
 ```cs
 public class MyService
@@ -76,7 +86,9 @@ Run this code in a console app and you see this printed out: `Logging in using A
 
 ### Changing the configuraion:
 
-We currently don't have a configuration file so we are getting the default properties for the configured type. If you add this JSON file to your current working directory you can override the configuration 
+We have not added JSON configuration file to our project. We get no errors just a default instance of the configured type. 
+
+Now, let's add this JSON file to your current working directory.
 
 #### MyConfigured.json
 
@@ -95,9 +107,9 @@ Open a command line:
 ```
 git clone https://github.com/KevM/Reactive.Config
 
-cd Reactive.Connfig
+cd Reactive.Config
 
 ./build.cmd
 ```
 
-The build automation will: pull down any dependencies, build, and run tests.
+The build automation will pull down any dependencies, build, and run all tests.
