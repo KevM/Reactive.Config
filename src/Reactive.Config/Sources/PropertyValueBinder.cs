@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Reactive.Config.Extensions
+namespace Reactive.Config.Sources
 {
     public interface IPropertyValueBinder
     {
         object BindValue(PropertyInfo propertyInfo, string value);
     }
+
+    // TODO add unit tests
 
     public class PropertyValueBinder : IPropertyValueBinder
     {

@@ -2,7 +2,6 @@
 using FluentAssertions;
 using NSubstitute;
 using NUnit.Framework;
-using Reactive.Config.Extensions;
 using Reactive.Config.Sources;
 
 namespace Reactive.Config.Tests.Sources

@@ -43,7 +43,7 @@
     <Compile Include="ConfigurationProvider.cs" />
     <Compile Include="ConfigurationResult.cs" />
     <Compile Include="ConfigurationResultStore.cs" />
-    <Compile Include="Extensions\PropertyInfoExtensions.cs" />
+    <Compile Include="Sources\PropertyValueBinder.cs" />
     <Compile Include="IConfigurationSource.cs" />
     <Compile Include="ConfigurationSourceResolver.cs" />
     <Compile Include="IConfigured.cs" />
@@ -55,6 +55,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="paket.references" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Extensions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
