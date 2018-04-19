@@ -7,6 +7,8 @@ namespace Reactive.Config.Tests
     public class TestConfigured : IConfigured
     {
         public bool IsEnabled { get; set; } = true;
+        public string AString { get; set; } = "this is a string";
+        public int AnInt32 { get; set; } = 123456789;
     }
 
     public class Configuration_Provider

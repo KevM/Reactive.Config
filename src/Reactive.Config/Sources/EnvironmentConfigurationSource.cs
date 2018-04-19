@@ -11,10 +11,12 @@ namespace Reactive.Config.Sources
     public class EnvironmentConfigurationSource : IConfigurationSource
     {
         private readonly IKeyPathProvider _keyPathProvider;
+        private readonly IPropertyValueBinder _propertyValueBinder;
 
-        public EnvironmentConfigurationSource(IKeyPathProvider keyPathProvider)
+        public EnvironmentConfigurationSource(IKeyPathProvider keyPathProvider, IPropertyValueBinder propertyValueBinder)
         {
             _keyPathProvider = keyPathProvider;
+            _propertyValueBinder = propertyValueBinder;
         }
 
         public bool Handles<T>() where T : class, IConfigured, new()
@@ -34,7 +36,7 @@ namespace Reactive.Config.Sources
             {
                 if (!typePropertiesByName.ContainsKey(keypair.Key)) continue;
                 var propertyInfo = typePropertiesByName[keypair.Key];
-                var newValue = propertyInfo.BindValue(keypair.Value);
+                var newValue = _propertyValueBinder.BindValue(propertyInfo, keypair.Value);
                 propertyInfo.SetValue(configured, newValue);
             }
 
@@ -51,9 +53,11 @@ namespace Reactive.Config.Sources
         {
             var keyPrefix = _keyPathProvider.GetKeyPath<T>();
 
-            return Environment.GetEnvironmentVariables()
+            var entries = Environment.GetEnvironmentVariables()
                 .OfType<DictionaryEntry>()
                 .Where(entry => ((string) entry.Key).StartsWith(keyPrefix));
+
+            return entries;
         }
 
         public static string GetKeyTail(string key)
