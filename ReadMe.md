@@ -113,3 +113,9 @@ cd Reactive.Config
 ```
 
 The build automation will pull down any dependencies, build, and run all tests.
+
+## Continuous Integration
+
+[AppVeyor](https://appveyor.com) is kind enough to provide CI for this project. Thanks!
+
+- [Reactive.Config CI](https://ci.appveyor.com/project/KevM/reactive-config)
