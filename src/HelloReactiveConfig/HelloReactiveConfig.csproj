@@ -79,12 +79,7 @@
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.7.1'">
       <ItemGroup>
         <Reference Include="StructureMap">
-          <HintPath>..\..\packages\structuremap\structuremap\lib\net40\StructureMap.dll</HintPath>
-          <Private>True</Private>
-          <Paket>True</Paket>
-        </Reference>
-        <Reference Include="StructureMap.Net4">
-          <HintPath>..\..\packages\structuremap\structuremap\lib\net40\StructureMap.Net4.dll</HintPath>
+          <HintPath>..\..\packages\structuremap\StructureMap\lib\net45\StructureMap.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>

@@ -36,7 +36,9 @@ GROUP StructureMap
 RESTRICTION: == net471
 NUGET
   remote: https://www.nuget.org/api/v2
-    structuremap (3.1.9.463)
+    StructureMap (4.6.1)
+      System.Reflection.Emit.Lightweight (>= 4.3)
+    System.Reflection.Emit.Lightweight (4.3)
 
 GROUP Test
 RESTRICTION: == net471

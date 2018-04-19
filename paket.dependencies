@@ -10,7 +10,7 @@ group StructureMap
 	framework: net471
     source https://www.nuget.org/api/v2
 
-    nuget StructureMap ~> 3.1
+    nuget StructureMap ~> 4
 
 group Files
 	framework: net471

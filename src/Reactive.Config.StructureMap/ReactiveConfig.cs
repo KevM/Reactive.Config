@@ -1,26 +1,38 @@
 using System;
-using StructureMap.Configuration.DSL;
+using System.Linq;
+using StructureMap;
 using StructureMap.Graph;
+using StructureMap.Graph.Scanning;
 
 namespace Reactive.Config.StructureMap
 {
     public class ReactiveConfig : IRegistrationConvention
     {
-        public void Process(Type type, Registry registry)
+        public void ScanTypes(TypeSet types, Registry registry)
         {
-            if (type.IsAbstract || !typeof(IConfigured).IsAssignableFrom(type)) return;
+            var configuredMarkerType = typeof(IConfigured);
+            var configuredTypes = types
+                .FindTypes(TypeClassification.Concretes)
+                .Where(t => configuredMarkerType.IsAssignableFrom(t));
 
-            registry
-                .For(type)
-                .Use("Reactive.Config", ctx =>
-                {
-                    var t = type;
-                    var provider = ctx.GetInstance<IConfigurationProvider>();
+            foreach (var type in configuredTypes)
+            {
+                registry
+                    .For(type)
+                    .Use("Reactive.Config", ctx =>
+                    {
+                        var provider = ctx.GetInstance<IConfigurationProvider>();
 
-                    var method = provider.GetType().GetMethod("Get");
-                    var generic = method.MakeGenericMethod(t);
-                    return generic.Invoke(provider, null);
-                });
+                        var method = provider.GetType().GetMethod("Get");
+                        if (method == null)
+                        {
+                            throw new NotImplementedException("IConfigurationProvider has to have a GET method. It is in the interface!");
+                        }
+
+                        var generic = method.MakeGenericMethod(type);
+                        return generic.Invoke(provider, null);
+                    });
+            }
         }
     }
 }
