@@ -9,8 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>HelloReactiveConfig</RootNamespace>
     <AssemblyName>HelloReactiveConfig</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -62,6 +64,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="paket.references" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -73,15 +76,15 @@
   </Target>
   -->
   <Choose>
-    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.5.2'">
+    <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v4.7.1'">
       <ItemGroup>
-        <Reference Include="StructureMap.Net4">
-          <HintPath>..\..\packages\structuremap\structuremap\lib\net40\StructureMap.Net4.dll</HintPath>
+        <Reference Include="StructureMap">
+          <HintPath>..\..\packages\structuremap\structuremap\lib\net40\StructureMap.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
-        <Reference Include="StructureMap">
-          <HintPath>..\..\packages\structuremap\structuremap\lib\net40\StructureMap.dll</HintPath>
+        <Reference Include="StructureMap.Net4">
+          <HintPath>..\..\packages\structuremap\structuremap\lib\net40\StructureMap.Net4.dll</HintPath>
           <Private>True</Private>
           <Paket>True</Paket>
         </Reference>
