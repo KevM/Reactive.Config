@@ -1,4 +1,5 @@
-.paket/paket.exe
+.paket/
+paket-files/
 bin
 obj
 *.suo
@@ -6,3 +7,5 @@ obj
 packages
 .fake
 artifacts
+.vs/
+TestResult.xml
