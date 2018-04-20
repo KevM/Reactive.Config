@@ -1,12 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive.Linq;
 using System.Threading;
 
 namespace Reactive.Config
 {
+    /// <summary>
+    /// Resolved configured types are held in memory here to avoid redundant re-population. 
+    /// Each result contians an <see cref="Observable"/> to which this store subscribes 
+    /// to remain up-to-date with the current state of the configured type.
+    /// </summary>
     public interface IConfigurationResultStore
     {
+        /// <summary>
+        /// Store the configured result and track its changes.
+        /// </summary>
         void Store<T>(ConfigurationResult<T> configurationResult) where T : class, IConfigured, new();
+
+        /// <summary>
+        /// Retrieve an up-to-date version of the configured result.
+        /// </summary>
         T Get<T>() where T : class, IConfigured, new();
     }
 
@@ -28,6 +41,9 @@ namespace Reactive.Config
             }
         }
 
+        /// <summary>
+        /// This method is invoked by observations of changes to the configuration result. 
+        /// </summary>
         public void UpdateResult<T>(T newResult) where T : class, IConfigured, new()
         {
             try

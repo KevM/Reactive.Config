@@ -6,6 +6,12 @@ using Reactive.Config.Files.Watcher;
 
 namespace Reactive.Config.Files.Sources
 {
+    /// <summary>
+    /// This configuration source supports a single .json file per <see cref="IConfigured" /> type. 
+    /// When a file is found with the full namespace of the configured type, (e.g. "Reactive.Config.Tests.TestConfigured.json") 
+    /// it will be deserialized and used to populate the configured type. The .json file will be watched for changes. 
+    /// When this happens the new changes will be made available to the store.
+    /// </summary>
     public class JsonConfigurationSource : IConfigurationSource
     {
         private readonly IKeyPathProvider _keyPathProvider;
