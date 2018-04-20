@@ -22,10 +22,10 @@ group Test
 	framework: net471
     source https://www.nuget.org/api/v2
 
-nuget FluentAssertions
-    nuget NSubstitute
+	nuget FluentAssertions
+	nuget NSubstitute
 	nuget NUnit
-    nuget NUnit.Runners
+	nuget NUnit.Runners
 	nuget Microsoft.Reactive.Testing
 
 group Build
