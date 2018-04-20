@@ -17,6 +17,7 @@ The goal of this library is to be your application's core supplier of static and
 Currently out of the box we provide:
 
 - JSON configuration source
+- [Enviornment configuration source](https://github.com/KevM/Reactive.Config/blob/63c8fa6fb3c8a6dcdf3a68c68388b1100cf08fcd/src/Reactive.Config/Sources/EnvironmentConfigurationSource.cs#L10-L15)
 - [StructureMap](http://structuremap.github.io/) IoC container integration
 
 ## Application Settings Example
