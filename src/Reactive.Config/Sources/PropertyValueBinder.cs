@@ -3,6 +3,11 @@ using System.Reflection;
 
 namespace Reactive.Config.Sources
 {
+    /// <summary>
+    /// Some configuration sources use reflection to set property values. 
+    /// This binder converts the string representation of the proprety value to an object suitable for setting.
+    /// Note: This will likely change when pushed harder an made more like Asp.Net MVC model binding.
+    /// </summary>
     public interface IPropertyValueBinder
     {
         object BindValue(PropertyInfo propertyInfo, string value);
@@ -10,6 +15,9 @@ namespace Reactive.Config.Sources
 
     // TODO add unit tests
 
+    /// <summary>
+    /// Primitive binder with limited primative support. Nested objects are not supported.
+    /// </summary>
     public class PropertyValueBinder : IPropertyValueBinder
     {
         public object BindValue(PropertyInfo propertyInfo, string value)

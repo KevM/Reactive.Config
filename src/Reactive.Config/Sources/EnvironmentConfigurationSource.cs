@@ -7,6 +7,11 @@ using System.Reflection;
 
 namespace Reactive.Config.Sources
 {
+    /// <summary>
+    /// Simple environment configuration source which looks for and binds environment values for keys found
+    /// with names matching the namespace, type name, and property name of the <see cref="IConfigured">configured type</see>. 
+    /// For example an environment value with the key "Reactive.Config.Tests.TestConfigured.IsEnabled" will be bound to the cooresponding property.
+    /// </summary>
     public class EnvironmentConfigurationSource : IConfigurationSource
     {
         private readonly IKeyPathProvider _keyPathProvider;
@@ -25,6 +30,9 @@ namespace Reactive.Config.Sources
 
         public ConfigurationResult<T> Get<T>(ConfigurationResult<T> result) where T : class, IConfigured, new()
         {
+            // TODO move all this custom rolled model binding to something more robust.
+            // https://lostechies.com/chadmyers/2011/06/08/cool-stuff-in-fubucore-no-7-model-binding/ <- this is what I've used in the past but it is pretty old.
+
             var configured = new T();
 
             const BindingFlags flags = BindingFlags.IgnoreCase | BindingFlags.Instance | BindingFlags.Public;
